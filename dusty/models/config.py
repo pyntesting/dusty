@@ -56,15 +56,15 @@ class ConfigModel:
         log.info("Loaded %s suite configuration", self.context.suite)
 
     def _load_config(self, config_seed, config_variable, config_file):
+        log.info("Loading config from seed")
         config_data = seeds.unseed(config_seed)
         if not config_data:
+            log.info("Loading config from %s", config_variable)
             config_data = os.environ.get(config_variable, None)
         if not config_data:
             log.info("Loading config from %s", config_file)
             with open(config_file, "rb") as file_:
                 config_data = file_.read()
-        else:
-            log.info("Loading config from %s", config_variable)
         config = self._variable_substitution(
             yaml.load(
                 os.path.expandvars(config_data),
